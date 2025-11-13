@@ -279,11 +279,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <a href="profil.php" class="sidebar-link">
             <i class="bi bi-person-badge-fill"></i> Informasi Pribadi
         </a>
-        <a href="kuesioner.php" class="sidebar-link active">
-            <i class="bi bi-list-task"></i> Isi Kuesioner
-        </a>
         <a href="pekerjaan.php" class="sidebar-link">
               <i class="bi bi-briefcase-fill"></i> Data Pekerjaan
+        </a>
+        <a href="kuesioner.php" class="sidebar-link active">
+            <i class="bi bi-list-task"></i> Isi Kuesioner
         </a>
     </div>
     <div class="mb-3">
