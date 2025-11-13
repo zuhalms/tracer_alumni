@@ -29,6 +29,7 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard Admin - Tracer Alumni</title>

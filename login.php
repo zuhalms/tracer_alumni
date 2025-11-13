@@ -26,6 +26,7 @@ function togglePassword(fieldId, btn) {
 }
 </script>
 <style>
+    
     body {
         min-height: 100vh;
         background: linear-gradient(135deg, #1abc9c 0%, #27ae60 100%);
