@@ -2,6 +2,9 @@
 session_start();
 include_once(dirname(__DIR__) . '/config/config.php');
 
+// --- Tambahan: Filter Tahun Lulus
+$tahunLulus = isset($_GET['tahun_lulus']) ? intval($_GET['tahun_lulus']) : '';
+$where = $tahunLulus ? "WHERE a.tahun_lulus = '$tahunLulus'" : '';
 // (optional) Cek login khusus admin di sini
 
 // Query alumni dan data tracer
@@ -13,14 +16,15 @@ SELECT
 FROM tb_alumni a
 LEFT JOIN tb_pekerjaan p ON p.id_alumni = a.id_alumni
 LEFT JOIN tb_kuesioner k ON k.id_alumni = a.id_alumni
+$where
 ORDER BY a.nama_lengkap ASC
 ";
 $result = mysqli_query($conn, $query);
 
 // Hitung total progres
-$total_alumni = mysqli_num_rows(mysqli_query($conn, "SELECT id_alumni FROM tb_alumni"));
-$isi_pekerjaan = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni FROM tb_pekerjaan"));
-$isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni FROM tb_kuesioner"));
+$total_alumni = mysqli_num_rows(mysqli_query($conn, "SELECT id_alumni FROM tb_alumni $where"));
+$isi_pekerjaan = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni FROM tb_pekerjaan".($tahunLulus?" WHERE id_alumni IN (SELECT id_alumni FROM tb_alumni WHERE tahun_lulus='$tahunLulus')":"")));
+$isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni FROM tb_kuesioner".($tahunLulus?" WHERE id_alumni IN (SELECT id_alumni FROM tb_alumni WHERE tahun_lulus='$tahunLulus')":"")));
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -145,6 +149,25 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
 
 <div class="main-content">
     <h4 class="fw-bold text-success mb-4"><i class="bi bi-speedometer2 me-2"></i>Dashboard Admin</h4>
+        <!-- FILTER TAHUN LULUS -->
+    <form method="get" class="mb-3">
+        <label for="tahun_lulus" class="me-2 fw-semibold">Tahun Lulus:</label>
+        <select name="tahun_lulus" id="tahun_lulus" class="form-select d-inline-block" style="width: 180px;">
+            <option value="">Semua Tahun</option>
+            <?php
+            $qTahun = mysqli_query($conn, "SELECT DISTINCT tahun_lulus FROM tb_alumni ORDER BY tahun_lulus DESC");
+            while($rowTahun = mysqli_fetch_assoc($qTahun)) {
+                $selected = ($tahunLulus == $rowTahun['tahun_lulus'] ? 'selected' : '');
+                echo "<option value='{$rowTahun['tahun_lulus']}' $selected>{$rowTahun['tahun_lulus']}</option>";
+            }
+            ?>
+        </select>
+        <button type="submit" class="btn btn-success btn-sm ms-2">Filter</button>
+        <?php if($tahunLulus): ?>
+          <a href="dashboard_admin.php" class="btn btn-secondary btn-sm ms-1">Reset</a>
+        <?php endif; ?>
+    </form>
+    
     <div class="row g-3 mb-3 progress-stats-row">
         <div class="col-md-4">
             <div class="card p-3">
