@@ -23,13 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_query($conn, $sqlInsert);
 
         // Kirim email ke user (simple mail(), bisa diganti PHPMailer)
-        $resetLink = "https://domainanda.com/reset_password.php?token=$token";
+            $resetLink = "https://traceralumni-tiuinam.my.id/reset_password.php?token=$token";
 
-        $subject = "Reset Password Tracer Alumni";
-        $message = "Klik link berikut untuk reset password Anda: $resetLink\nLink ini hanya berlaku selama 1 jam.";
-        $headers = "From: no-reply@domainanda.com";
+            $subject = "Reset Password Tracer Alumni";
+            $message = "Klik link berikut untuk reset password Anda: $resetLink\nLink ini hanya berlaku selama 1 jam.";
 
-        mail($email, $subject, $message, $headers);
+            $headers  = "From: no-reply@traceralumni-tiuinam.my.id\r\n";
+            $headers .= "Reply-To: no-reply@traceralumni-tiuinam.my.id\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+
+            mail($email, $subject, $message, $headers);
+
 
         $success_msg = "Email reset password sudah dikirim. Cek inbox Anda.";
     } else {
