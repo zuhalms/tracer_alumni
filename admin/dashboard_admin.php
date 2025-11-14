@@ -6,7 +6,7 @@ session_start();
 <head>
     <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Dashboard Admin - Tracer Alumni</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -83,12 +83,12 @@ session_start();
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding-bottom: 100px; /* Beri ruang untuk tombol logout */
+            padding-bottom: 20px;
         }
         
         .sidebar-content {
             flex: 1;
+            overflow-y: auto;
         }
         
         .sidebar-profile {
@@ -151,7 +151,7 @@ session_start();
             width: 265px;
             text-align: center;
             z-index: 1041;
-            background: #fff; /* Tambahkan background agar tidak transparan */
+            background: #fff;
             padding: 10px 0;
         }
         
@@ -221,7 +221,9 @@ session_start();
                 top: 0;
                 border-radius: 0;
                 box-shadow: none;
-                padding-bottom: 20px; /* Reset padding untuk mobile */
+                padding-bottom: 0;
+                max-height: 100vh;
+                max-height: 100dvh;
             }
             
             .sidebar-admin.active {
@@ -232,13 +234,19 @@ session_start();
                 display: block;
             }
             
+            .sidebar-content {
+                padding-bottom: 20px;
+            }
+            
             .logout-link {
-                position: relative; /* Ubah dari fixed ke relative */
+                position: relative;
                 bottom: auto;
                 width: 100%;
-                padding: 20px;
+                padding: 15px 20px;
+                padding-bottom: max(30px, env(safe-area-inset-bottom, 30px));
                 margin-top: 20px;
                 background: transparent;
+                flex-shrink: 0;
             }
             
             .main-content {

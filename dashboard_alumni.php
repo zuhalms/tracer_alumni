@@ -22,7 +22,7 @@ $title = "Dashboard Alumni";
 <head>
     <link rel="icon" type="image/png" href="assets/logo-uin.png">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title><?= htmlspecialchars($title) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
@@ -115,15 +115,15 @@ $title = "Dashboard Alumni";
             width: 265px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             padding-top: 64px;
-            padding-bottom: 80px;
+            padding-bottom: 20px;
             transition: transform 0.3s ease-in-out;
             overflow-y: auto;
         }
         
         .sidebar-content {
             flex: 1;
+            overflow-y: auto;
         }
         
         .profile-box {
@@ -173,8 +173,10 @@ $title = "Dashboard Alumni";
         
         /* Logout Link - Hanya tampil di sidebar untuk mobile */
         .logout-sidebar {
-            padding: 0 20px 20px 20px;
-            display: none; /* Hidden by default */
+            padding: 15px 20px;
+            padding-bottom: max(30px, env(safe-area-inset-bottom, 30px));
+            display: none;
+            flex-shrink: 0;
         }
         
         /* Main Content */
@@ -233,7 +235,9 @@ $title = "Dashboard Alumni";
             .sidebar {
                 transform: translateX(-100%);
                 width: 100vw;
-                padding-bottom: 20px;
+                max-height: 100vh;
+                max-height: 100dvh; /* Dynamic viewport height untuk mobile */
+                padding-bottom: 0;
             }
             
             .sidebar.active {
@@ -242,6 +246,10 @@ $title = "Dashboard Alumni";
             
             .sidebar-overlay.active {
                 display: block;
+            }
+            
+            .sidebar-content {
+                padding-bottom: 20px;
             }
             
             /* Tampilkan logout di sidebar untuk mobile */

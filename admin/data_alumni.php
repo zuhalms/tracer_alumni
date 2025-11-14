@@ -30,7 +30,7 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
 <head>
     <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Data Alumni - Tracer Alumni</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
@@ -105,15 +105,15 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             width: 265px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             padding-top: 64px;
-            padding-bottom: 100px;
+            padding-bottom: 20px;
             transition: transform 0.3s ease-in-out;
             overflow-y: auto;
         }
         
         .sidebar-content {
             flex: 1;
+            overflow-y: auto;
         }
         
         .profile-box {
@@ -232,7 +232,9 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             .sidebar {
                 transform: translateX(-100%);
                 width: 100vw;
-                padding-bottom: 20px;
+                padding-bottom: 0;
+                max-height: 100vh;
+                max-height: 100dvh;
             }
             
             .sidebar.active {
@@ -243,13 +245,19 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
                 display: block;
             }
             
+            .sidebar-content {
+                padding-bottom: 20px;
+            }
+            
             .logout-link {
                 position: relative;
                 bottom: auto;
                 width: 100%;
-                padding: 20px;
+                padding: 15px 20px;
+                padding-bottom: max(30px, env(safe-area-inset-bottom, 30px));
                 margin-top: 20px;
                 background: transparent;
+                flex-shrink: 0;
             }
             
             .main-content {
