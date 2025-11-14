@@ -97,23 +97,6 @@ include 'includes/header.php';
                 font-size: 1.4rem;
             }
         }
-        /* Tambahan styling untuk footer link */
-        .login-footer-links {
-            margin-top: 20px;
-            text-align: center;
-            font-weight: 500;
-            color: #339966;
-            line-height: 1.6;
-        }
-        .login-footer-links a {
-            color: #229954;
-            text-decoration: none;
-            font-weight: 600;
-            margin: 0 10px;
-        }
-        .login-footer-links a:hover {
-            text-decoration: underline;
-        }
     </style>
     <script>
     function togglePassword(fieldId, btn) {
@@ -179,14 +162,11 @@ include 'includes/header.php';
             <button type="submit" class="btn btn-green w-100 my-3">Login</button>
         </form>
 
-        <div class="login-footer-links">
-            <a href="register.php">Daftar di sini</a>
-            |
-            <a href="forgot_password.php">Lupa Password?</a>
-            |
-            <a href="index.php">← Kembali ke Beranda</a>
+        <div class="mt-2 text-center small">
+            Belum punya akun? <a href="register.php" class="text-success">Daftar di sini</a>
+            <br>
+            <a href="index.php" class="text-success">← Kembali ke Beranda</a>
         </div>
-
     </div>
 </div>
 
