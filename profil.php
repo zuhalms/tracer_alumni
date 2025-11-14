@@ -2,6 +2,12 @@
 session_start();
 include 'config/config.php';
 
+// Force set PHP upload limits (di awal sekali)
+@ini_set('upload_max_filesize', '10M');
+@ini_set('post_max_size', '12M');
+@ini_set('max_execution_time', '300');
+@ini_set('memory_limit', '256M');
+
 // Cek login
 if (!isset($_SESSION['is_login']) || $_SESSION['is_login'] !== true) {
     header("Location: login.php?error=not_logged_in");
@@ -29,31 +35,80 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $foto_path = $data['foto']; // Default ke foto lama
     
     // Proses upload foto jika ada
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
-        $allowed_types = ['image/jpeg', 'image/jpg', 'image/png'];
-        $max_size = 10 * 1024 * 1024; // 10MB
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] !== UPLOAD_ERR_NO_FILE) {
         
-        if (in_array($_FILES['foto']['type'], $allowed_types) && $_FILES['foto']['size'] <= $max_size) {
-            $upload_dir = 'uploads/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-            
-            $file_extension = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-            $new_filename = 'foto_' . $id_alumni . '_' . time() . '.' . $file_extension;
-            $upload_path = $upload_dir . $new_filename;
-            
-            if (move_uploaded_file($_FILES['foto']['tmp_name'], $upload_path)) {
-                // Hapus foto lama jika ada
-                if ($data['foto'] && file_exists($data['foto'])) {
-                    unlink($data['foto']);
-                }
-                $foto_path = $upload_path;
-            } else {
-                $error_msg = "Gagal mengupload foto.";
+        // Debug: Cek error upload
+        if ($_FILES['foto']['error'] !== UPLOAD_ERR_OK) {
+            switch ($_FILES['foto']['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+                    $file_size_mb = round($_FILES['foto']['size'] / 1024 / 1024, 2);
+                    $error_msg = "Ukuran file terlalu besar ($file_size_mb MB). Server limit: " . ini_get('upload_max_filesize') . ". Silakan hubungi administrator.";
+                    break;
+                case UPLOAD_ERR_PARTIAL:
+                    $error_msg = "Upload file tidak lengkap. Silakan coba lagi.";
+                    break;
+                case UPLOAD_ERR_NO_TMP_DIR:
+                    $error_msg = "Folder temporary tidak ditemukan di server.";
+                    break;
+                case UPLOAD_ERR_CANT_WRITE:
+                    $error_msg = "Gagal menulis file ke disk.";
+                    break;
+                default:
+                    $error_msg = "Terjadi error saat upload. Error code: " . $_FILES['foto']['error'];
             }
         } else {
-            $error_msg = "Format foto tidak valid atau ukuran terlalu besar (max 10MB).";
+            // Validasi tipe file
+            $allowed_types = ['image/jpeg', 'image/jpg', 'image/png'];
+            $file_type = $_FILES['foto']['type'];
+            $file_size = $_FILES['foto']['size'];
+            $max_size = 10 * 1024 * 1024; // 10MB
+            
+            // Tambahan: Check MIME type dari content (lebih akurat)
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $detected_type = finfo_file($finfo, $_FILES['foto']['tmp_name']);
+            finfo_close($finfo);
+            
+            if (!in_array($file_type, $allowed_types) && !in_array($detected_type, ['image/jpeg', 'image/png'])) {
+                $error_msg = "Format file tidak valid. Hanya JPG, JPEG, dan PNG yang diperbolehkan.";
+            }
+            elseif ($file_size > $max_size) {
+                $size_mb = round($file_size / 1024 / 1024, 2);
+                $error_msg = "Ukuran file terlalu besar ($size_mb MB). Maksimal 10MB.";
+            }
+            else {
+                $upload_dir = 'uploads/';
+                
+                // Buat folder jika belum ada
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                
+                // Set permission folder (untuk memastikan bisa write)
+                @chmod($upload_dir, 0755);
+                
+                $file_extension = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+                $new_filename = 'foto_' . $id_alumni . '_' . time() . '.' . $file_extension;
+                $upload_path = $upload_dir . $new_filename;
+                
+                // Coba upload
+                if (move_uploaded_file($_FILES['foto']['tmp_name'], $upload_path)) {
+                    // Set permission file yang diupload
+                    @chmod($upload_path, 0644);
+                    
+                    // Hapus foto lama jika ada dan bukan placeholder
+                    if (!empty($data['foto']) 
+                        && file_exists($data['foto']) 
+                        && $data['foto'] !== 'assets/profile_placeholder.png'
+                        && strpos($data['foto'], 'uploads/') !== false) {
+                        @unlink($data['foto']);
+                    }
+                    
+                    $foto_path = $upload_path;
+                } else {
+                    $error_msg = "Gagal mengupload foto. Pastikan folder 'uploads/' memiliki permission 755.";
+                }
+            }
         }
     }
 
@@ -72,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             WHERE id_alumni='$id_alumni'";
 
         if (mysqli_query($conn, $update)) {
-            $_SESSION['nama_lengkap'] = $nama_lengkap; // Update session nama
+            $_SESSION['nama_lengkap'] = $nama_lengkap;
             header("Location: profil.php?success=update");
             exit();
         } else {
@@ -299,13 +354,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <a href="kuesioner.php" class="sidebar-link">
             <i class="bi bi-list-task"></i> Isi Kuesioner
         </a>
-
     </div>
     <div class="mb-3">
         <a href="logout.php" class="sidebar-link text-danger">
             <i class="bi bi-box-arrow-right"></i> Logout
         </a>
-
     </div>
 </div>
 
@@ -341,6 +394,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                  class="foto-preview" alt="Foto Profil" id="preview-foto">
                         </div>
                         <form method="POST" enctype="multipart/form-data" id="form-foto">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
                             <input type="hidden" name="nama_lengkap" value="<?= htmlspecialchars($data['nama_lengkap']) ?>">
                             <input type="hidden" name="fakultas" value="<?= htmlspecialchars($data['fakultas']) ?>">
                             <input type="hidden" name="program_studi" value="<?= htmlspecialchars($data['program_studi']) ?>">
@@ -353,8 +407,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label for="foto" class="btn-upload d-block">
                                 <i class="bi bi-camera-fill me-2"></i>Pilih Foto
                             </label>
-                            <input type="file" id="foto" name="foto" accept="image/*" style="display: none;">
+                            <input type="file" id="foto" name="foto" accept="image/jpeg,image/jpg,image/png" style="display: none;">
                             <small class="text-muted mt-2 d-block">Format: JPG, PNG. Max: 10MB</small>
+                            <small class="text-muted d-block">Server limit: <?= ini_get('upload_max_filesize') ?></small>
                         </form>
                     </div>
                 </div>
@@ -448,6 +503,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 document.getElementById('foto').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
+        // Cek ukuran file di JavaScript
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+            const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+            alert(`Ukuran file terlalu besar (${sizeMB} MB)! Maksimal 10MB.`);
+            e.target.value = ''; // Reset input
+            return;
+        }
+        
         // Preview foto
         const reader = new FileReader();
         reader.onload = function(e) {
