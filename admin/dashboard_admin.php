@@ -4,6 +4,7 @@ session_start();
 <!DOCTYPE html>
 <html lang="id">
 <head>
+     <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard Admin - Tracer Alumni</title>
@@ -108,13 +109,31 @@ session_start();
             min-width: 22px;
         }
         /* -- RESPONSIVE -- */
-        @media (max-width: 991px) {
-            .main-content { padding: 14px 2vw 12px 2vw; margin-left: 0; }
-            .sidebar-admin { position: static; width: 100vw; min-height: unset; box-shadow: none;}
-            .nav-and-sidebar { display: block; }
-            .welcome-box { margin-left: auto; margin-right: auto;}
-            .logout-link { position: static; width: 100%; }
-        }
+@media (max-width: 991px) {
+    .sidebar-admin {
+        position: static !important;
+        width: 100vw !important;
+        min-height: unset !important;
+        box-shadow: none !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: auto !important;
+        z-index: initial !important;
+        display: block !important;
+    }
+    .main-content {
+        margin-left: 0 !important;
+        padding: 14px 3vw 12px 3vw !important;
+        min-width: 0 !important;
+        width: 100vw !important;
+    }
+    .welcome-box {
+        margin: 0 auto 24px auto !important;
+        max-width: 100vw !important;
+        width: 100% !important;
+        padding: 14px 4vw 18px 4vw !important;
+    }
+}
         @media (max-width:600px) {
             .main-content {padding: 9px 1vw 9px 1vw;}
             .welcome-box {padding: 12px 7vw 18px 7vw;}
