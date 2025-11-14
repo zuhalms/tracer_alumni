@@ -4,7 +4,6 @@ session_start();
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard Admin - Tracer Alumni</title>
@@ -23,13 +22,19 @@ session_start();
             z-index: 1051;
         }
         .navbar-brand {
-            display: flex; align-items: center; gap: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
             color: #197948 !important;
             font-weight: 700;
             font-size: 1.25rem;
         }
         .navbar-brand img {
-            height:40px; width:40px; object-fit:contain; border-radius:6px; border:none;
+            height: 40px;
+            width: 40px;
+            object-fit: contain;
+            border-radius: 6px;
+            border: none;
         }
         .sidebar-admin {
             min-height: 100vh;
@@ -38,7 +43,9 @@ session_start();
             box-shadow: 0 2px 24px 0 #c3ecc67e;
             padding: 0;
             position: fixed;
-            top: 0; left: 0; z-index: 1100;
+            top: 0;
+            left: 0;
+            z-index: 1100;
         }
         .sidebar-profile {
             display: flex;
@@ -100,18 +107,27 @@ session_start();
             font-size: 1.12rem;
             min-width: 22px;
         }
-        @media (max-width:900px) {
-            .sidebar-admin { width: 100vw; position: static; min-height: auto; }
-            .main-content { margin-left: 0; }
+        /* -- RESPONSIVE -- */
+        @media (max-width: 991px) {
+            .main-content { padding: 14px 2vw 12px 2vw; margin-left: 0; }
+            .sidebar-admin { position: static; width: 100vw; min-height: unset; box-shadow: none;}
+            .nav-and-sidebar { display: block; }
+            .welcome-box { margin-left: auto; margin-right: auto;}
+            .logout-link { position: static; width: 100%; }
+        }
+        @media (max-width:600px) {
+            .main-content {padding: 9px 1vw 9px 1vw;}
+            .welcome-box {padding: 12px 7vw 18px 7vw;}
+            .header-admin {font-size: 1.08rem;}
         }
         .main-content {
             margin-left: 265px;
             padding: 20px 38px 30px 38px;
             min-height: 100vh;
             background: #f6fafd;
-            /* Add stacking context */
             position: relative;
             z-index: 1;
+            transition: padding 0.2s, margin-left 0.2s;
         }
         .header-admin {
             font-weight: 700;
@@ -128,8 +144,6 @@ session_start();
             max-width: 1500px;
             margin: 0 0 40px 0;
             border: 1.2px solid #e8efeb;
-            margin-left: 0;
-            float: none;
         }
         .welcome-head {
             font-weight: 800;
@@ -150,7 +164,6 @@ session_start();
             bottom: 28px; left: 0; width: 265px;
             text-align: center;
         }
-        /* Prevent sidebar from overlapping header */
         @media (min-width: 900px) {
           .navbar {
             left: 0;
@@ -165,15 +178,6 @@ session_start();
             top: 64px;
             height: calc(100vh - 64px);
           }
-        }
-        @media (max-width: 991px) {
-            .main-content { padding: 28px 3vw 18px 3vw; }
-            .welcome-box { margin-left: auto; margin-right: auto;}
-            .sidebar-admin, .navbar {
-                position: static !important;
-                width: 100vw;
-            }
-            .logout-link { position: static; width: 100%; }
         }
     </style>
 </head>
@@ -205,7 +209,6 @@ session_start();
         <a href="logout_admin.php" class="btn btn-outline-danger btn-sm my-2 px-4"><i class="bi bi-box-arrow-right me-1"></i>Logout</a>
     </div>
 </div>
-
 <div class="main-content">
     <div class="header-admin"><i class="bi bi-house-door-fill me-2"></i>Dashboard</div>
     <div class="welcome-box mb-4">
@@ -216,6 +219,7 @@ session_start();
             Silakan gunakan menu di sidebar untuk navigasi fitur sistem ini.
         </div>
     </div>
+    <!-- Tambahkan grafik/grafik-card di sini, sudah responsif -->
 </div>
 </body>
 </html>
