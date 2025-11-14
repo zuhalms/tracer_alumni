@@ -20,30 +20,44 @@ $title = "Dashboard Alumni";
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <link rel="icon" type="image/png" href="../assets/logo-uin.png">
+    <link rel="icon" type="image/png" href="assets/logo-uin.png">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><?= htmlspecialchars($title) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
     <style>
-        html, body { height:100%; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+        }
         body {
             background: #f6fafd;
             min-height: 100vh;
             margin: 0;
             font-family: 'Montserrat', Arial, sans-serif;
+            overflow-x: hidden;
         }
+        
+        /* Navbar */
         .navbar {
             background: #e8f5e9 !important;
             box-shadow: 0 2px 8px rgba(120,180,120,0.10) !important;
             z-index: 1051;
             min-height: 64px;
             padding: 8px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
         }
         .navbar-brand {
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            align-items: center;
             gap: 14px;
             color: #197948 !important;
             font-weight: 700;
@@ -51,12 +65,12 @@ $title = "Dashboard Alumni";
             letter-spacing: .01em;
         }
         .navbar-brand img {
-            height: 40px; 
-            width: 40px; 
-            object-fit: contain; 
+            height: 40px;
+            width: 40px;
+            object-fit: contain;
             border-radius: 6px;
-            border: none; 
-            box-shadow: none; 
+            border: none;
+            box-shadow: none;
             background: transparent;
         }
         .navbar .nav-link {
@@ -74,6 +88,19 @@ $title = "Dashboard Alumni";
             background: #dcf8e5;
             color: #145a35 !important;
         }
+        
+        /* Hamburger Button */
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #197948;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        
+        /* Sidebar */
         .sidebar {
             min-height: 100vh;
             background: #fff;
@@ -81,65 +108,90 @@ $title = "Dashboard Alumni";
             padding: 0;
             box-shadow: 0 1px 10px #3ead6130;
             position: fixed;
-            left: 0; 
-            top: 64px;
-            bottom: 0; 
+            left: 0;
+            top: 0;
+            bottom: 0;
             z-index: 1040;
-            width: 230px;
-            display: flex; 
-            flex-direction: column; 
+            width: 265px;
+            display: flex;
+            flex-direction: column;
             justify-content: space-between;
+            padding-top: 64px;
+            padding-bottom: 80px;
+            transition: transform 0.3s ease-in-out;
+            overflow-y: auto;
         }
-        .main-content {
-            margin-left: 230px;
-            padding: 88px 38px 30px 38px;
+        
+        .sidebar-content {
+            flex: 1;
         }
+        
         .profile-box {
             text-align: center;
-            padding: 32px 0 14px 0;
+            padding: 32px 20px 14px 20px;
         }
         .profile-img {
-            width: 92px; 
-            height: 92px; 
+            width: 92px;
+            height: 92px;
             object-fit: cover;
-            border-radius: 50%; 
+            border-radius: 50%;
             border: 4px solid #e9f7ef;
         }
         .profile-name {
-            font-size: 1.14rem; 
-            font-weight: 700; 
-            margin-top: 8px; 
+            font-size: 1.14rem;
+            font-weight: 700;
+            margin-top: 8px;
             color: #197948;
         }
         .profile-desc {
-            font-size: 1.01rem; 
+            font-size: 1.01rem;
             color: #7fa882;
         }
+        
         .sidebar-link {
-            display: flex; 
+            display: flex;
             align-items: center;
-            color: #222; 
+            color: #222;
             background: #f7fcfa;
-            border: none; 
-            padding: 14px 28px; 
+            border: none;
+            padding: 14px 28px;
             margin-bottom: 4px;
             border-radius: 8px 0 0 8px;
-            text-decoration: none; 
+            text-decoration: none;
             font-weight: 500;
             transition: .18s;
         }
-        .sidebar-link.active, .sidebar-link:hover {
+        .sidebar-link.active,
+        .sidebar-link:hover {
             background: #dcf8e5;
             color: #258B42;
         }
         .sidebar-link i {
-            font-size: 1.15rem; 
+            font-size: 1.15rem;
             margin-right: 11px;
         }
+        
+        /* Logout Link - Hanya tampil di sidebar untuk mobile */
+        .logout-sidebar {
+            padding: 0 20px 20px 20px;
+            display: none; /* Hidden by default */
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 265px;
+            margin-top: 64px;
+            padding: 30px 38px;
+            min-height: calc(100vh - 64px);
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        /* Cards */
         .card {
             border-radius: 16px;
             box-shadow: 0 4px 14px rgba(34,139,34,0.07);
         }
+        
         .status-icon {
             width: 24px;
             height: 24px;
@@ -158,19 +210,52 @@ $title = "Dashboard Alumni";
             background: #fff3cd;
             color: #664d03;
         }
-        @media (max-width: 900px) {
-            .sidebar {
-                width: 100vw;
-                position: relative;
-                top: 0;
-                border-radius: 0;
-                min-height: auto;
-                box-shadow: none;
+        
+        /* Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1039;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 991px) {
+            .hamburger-btn {
+                display: block;
             }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100vw;
+                padding-bottom: 20px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .sidebar-overlay.active {
+                display: block;
+            }
+            
+            /* Tampilkan logout di sidebar untuk mobile */
+            .logout-sidebar {
+                display: block;
+            }
+            
             .main-content {
                 margin-left: 0;
-                padding: 20px 6px 18px 6px;
+                padding: 20px 20px;
             }
+        }
+        
+        @media (max-width: 600px) {
             .navbar-brand {
                 font-size: 1.1rem;
             }
@@ -178,21 +263,37 @@ $title = "Dashboard Alumni";
                 height: 32px;
                 width: 32px;
             }
+            .main-content {
+                padding: 16px 12px;
+            }
+            .profile-img {
+                width: 70px;
+                height: 70px;
+            }
+            .profile-name {
+                font-size: 1rem;
+            }
+            .profile-desc {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid px-3">
+        <button class="hamburger-btn" id="hamburgerBtn">
+            <i class="bi bi-list"></i>
+        </button>
         <a class="navbar-brand fw-bold" href="dashboard_alumni.php">
             <img src="assets/logo-uin.png" alt="Logo"/>
             Tracer Alumni
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDashboard" aria-controls="navbarNavDashboard" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div id="navbarNavDashboard" class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
+        <!-- Menu navbar untuk desktop ONLY -->
+        <div class="d-none d-lg-flex ms-auto">
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link active" href="dashboard_alumni.php">
                         <i class="bi bi-house-door-fill"></i> Dashboard
@@ -208,8 +309,12 @@ $title = "Dashboard Alumni";
     </div>
 </nav>
 
-<div class="sidebar">
-    <div>
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-content">
         <div class="profile-box">
             <?php
             $foto_path = 'assets/profile_placeholder.png';
@@ -221,26 +326,30 @@ $title = "Dashboard Alumni";
             <div class="profile-name"><?= htmlspecialchars($data['nama_lengkap']) ?></div>
             <div class="profile-desc">Alumni<br><?= htmlspecialchars($data['program_studi']) ?></div>
         </div>
-        <a href="dashboard_alumni.php" class="sidebar-link active">
-            <i class="bi bi-house-door-fill"></i> Dashboard
-        </a>
-        <a href="profil.php" class="sidebar-link">
-            <i class="bi bi-person-badge-fill"></i> Informasi Pribadi
-        </a>
-        <a href="pekerjaan.php" class="sidebar-link">
-            <i class="bi bi-briefcase-fill"></i> Data Pekerjaan
-        </a>
-        <a href="kuesioner.php" class="sidebar-link">
-            <i class="bi bi-list-task"></i> Isi Kuesioner
-        </a>
+        <div>
+            <a href="dashboard_alumni.php" class="sidebar-link active">
+                <i class="bi bi-house-door-fill"></i> Dashboard
+            </a>
+            <a href="profil.php" class="sidebar-link">
+                <i class="bi bi-person-badge-fill"></i> Informasi Pribadi
+            </a>
+            <a href="pekerjaan.php" class="sidebar-link">
+                <i class="bi bi-briefcase-fill"></i> Data Pekerjaan
+            </a>
+            <a href="kuesioner.php" class="sidebar-link">
+                <i class="bi bi-list-task"></i> Isi Kuesioner
+            </a>
+        </div>
     </div>
-    <div class="mb-3">
+    <!-- Logout hanya tampil di sidebar untuk mobile -->
+    <div class="logout-sidebar">
         <a href="logout.php" class="sidebar-link text-danger">
             <i class="bi bi-box-arrow-right"></i> Logout
         </a>
     </div>
 </div>
 
+<!-- Main Content -->
 <div class="main-content">
     <h4 class="fw-bold text-success mb-4">Beranda</h4>
     
@@ -411,6 +520,36 @@ $title = "Dashboard Alumni";
         </div>
     </div>
 </div>
+
+<!-- JavaScript -->
+<script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+    // Toggle sidebar
+    hamburgerBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+    });
+    
+    // Close sidebar when overlay clicked
+    sidebarOverlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+    });
+    
+    // Close sidebar when menu item clicked (mobile)
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 991) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+        });
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
