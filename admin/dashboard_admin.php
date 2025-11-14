@@ -6,7 +6,7 @@ session_start();
 <head>
     <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard Admin - Tracer Alumni</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -83,12 +83,12 @@ session_start();
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            padding-bottom: 20px;
+            justify-content: space-between;
+            padding-bottom: 100px;
         }
         
         .sidebar-content {
             flex: 1;
-            overflow-y: auto;
         }
         
         .sidebar-profile {
@@ -143,7 +143,7 @@ session_start();
             min-width: 22px;
         }
         
-        /* Logout button fixed at bottom of sidebar */
+        /* Logout button fixed at bottom of sidebar (Desktop) */
         .logout-link {
             position: fixed;
             bottom: 28px;
@@ -153,6 +153,13 @@ session_start();
             z-index: 1041;
             background: #fff;
             padding: 10px 0;
+        }
+        
+        /* Logout button after profile (Mobile) - Hidden by default */
+        .logout-mobile {
+            display: none;
+            padding: 15px 20px;
+            margin-top: 10px;
         }
         
         /* Main Content */
@@ -221,9 +228,7 @@ session_start();
                 top: 0;
                 border-radius: 0;
                 box-shadow: none;
-                padding-bottom: 0;
-                max-height: 100vh;
-                max-height: 100dvh;
+                padding-bottom: 20px;
             }
             
             .sidebar-admin.active {
@@ -234,19 +239,13 @@ session_start();
                 display: block;
             }
             
-            .sidebar-content {
-                padding-bottom: 20px;
+            /* Hide desktop logout, show mobile logout */
+            .logout-link {
+                display: none;
             }
             
-            .logout-link {
-                position: relative;
-                bottom: auto;
-                width: 100%;
-                padding: 15px 20px;
-                padding-bottom: max(30px, env(safe-area-inset-bottom, 30px));
-                margin-top: 20px;
-                background: transparent;
-                flex-shrink: 0;
+            .logout-mobile {
+                display: block;
             }
             
             .main-content {
@@ -337,6 +336,14 @@ session_start();
             <div class="admin-name">Administrator</div>
             <div class="admin-role">Tracer Alumni</div>
         </div>
+        
+        <!-- Logout Mobile (After Profile) -->
+        <div class="logout-mobile">
+            <a href="logout_admin.php" class="btn btn-outline-danger btn-sm w-100 px-4">
+                <i class="bi bi-box-arrow-right me-1"></i>Logout
+            </a>
+        </div>
+        
         <div class="sidebar-menu">
             <a href="dashboard_admin.php" class="menu-item active">
                 <i class="bi bi-house-door-fill"></i> Dashboard
@@ -349,7 +356,8 @@ session_start();
             </a>
         </div>
     </div>
-    <!-- Tombol logout tetap terlihat -->
+    
+    <!-- Logout Desktop (Bottom) -->
     <div class="logout-link">
         <a href="logout_admin.php" class="btn btn-outline-danger btn-sm my-2 px-4">
             <i class="bi bi-box-arrow-right me-1"></i>Logout

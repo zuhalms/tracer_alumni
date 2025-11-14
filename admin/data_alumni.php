@@ -30,7 +30,7 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
 <head>
     <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Data Alumni - Tracer Alumni</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
@@ -105,15 +105,15 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             width: 265px;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             padding-top: 64px;
-            padding-bottom: 20px;
+            padding-bottom: 100px;
             transition: transform 0.3s ease-in-out;
             overflow-y: auto;
         }
         
         .sidebar-content {
             flex: 1;
-            overflow-y: auto;
         }
         
         .profile-box {
@@ -162,7 +162,7 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             margin-right: 11px;
         }
         
-        /* Logout Link */
+        /* Logout Link (Desktop) */
         .logout-link {
             position: fixed;
             bottom: 28px;
@@ -172,6 +172,13 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             z-index: 1041;
             background: #fff;
             padding: 10px 0;
+        }
+        
+        /* Logout Mobile (After Profile) - Hidden by default */
+        .logout-mobile {
+            display: none;
+            padding: 15px 20px;
+            margin-top: 10px;
         }
         
         /* Main Content */
@@ -232,9 +239,7 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             .sidebar {
                 transform: translateX(-100%);
                 width: 100vw;
-                padding-bottom: 0;
-                max-height: 100vh;
-                max-height: 100dvh;
+                padding-bottom: 20px;
             }
             
             .sidebar.active {
@@ -245,19 +250,13 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
                 display: block;
             }
             
-            .sidebar-content {
-                padding-bottom: 20px;
+            /* Hide desktop logout, show mobile logout */
+            .logout-link {
+                display: none;
             }
             
-            .logout-link {
-                position: relative;
-                bottom: auto;
-                width: 100%;
-                padding: 15px 20px;
-                padding-bottom: max(30px, env(safe-area-inset-bottom, 30px));
-                margin-top: 20px;
-                background: transparent;
-                flex-shrink: 0;
+            .logout-mobile {
+                display: block;
             }
             
             .main-content {
@@ -315,6 +314,14 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             <div class="admin-name">Administrator</div>
             <div class="admin-role">Tracer Alumni</div>
         </div>
+        
+        <!-- Logout Mobile (After Profile) -->
+        <div class="logout-mobile">
+            <a href="logout_admin.php" class="btn btn-outline-danger btn-sm w-100 px-4">
+                <i class="bi bi-box-arrow-right me-1"></i>Logout
+            </a>
+        </div>
+        
         <div>
             <a href="dashboard_admin.php" class="sidebar-link">
                 <i class="bi bi-house-door-fill"></i> Dashboard
@@ -327,6 +334,8 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni 
             </a>
         </div>
     </div>
+    
+    <!-- Logout Desktop (Bottom) -->
     <div class="logout-link">
         <a href="logout_admin.php" class="btn btn-outline-danger btn-sm my-2 px-4">
             <i class="bi bi-box-arrow-right me-1"></i>Logout

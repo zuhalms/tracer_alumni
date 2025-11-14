@@ -22,7 +22,7 @@ $title = "Dashboard Alumni";
 <head>
     <link rel="icon" type="image/png" href="assets/logo-uin.png">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><?= htmlspecialchars($title) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
@@ -116,14 +116,13 @@ $title = "Dashboard Alumni";
             display: flex;
             flex-direction: column;
             padding-top: 64px;
-            padding-bottom: 20px;
+            padding-bottom: 80px;
             transition: transform 0.3s ease-in-out;
             overflow-y: auto;
         }
         
         .sidebar-content {
             flex: 1;
-            overflow-y: auto;
         }
         
         .profile-box {
@@ -171,12 +170,17 @@ $title = "Dashboard Alumni";
             margin-right: 11px;
         }
         
-        /* Logout Link - Hanya tampil di sidebar untuk mobile */
+        /* Logout Link - Hidden on mobile */
         .logout-sidebar {
-            padding: 15px 20px;
-            padding-bottom: max(30px, env(safe-area-inset-bottom, 30px));
+            padding: 0 20px 20px 20px;
+            display: block;
+        }
+        
+        /* Logout Mobile (After Profile) - Hidden by default */
+        .logout-mobile {
             display: none;
-            flex-shrink: 0;
+            padding: 15px 20px;
+            margin-top: 10px;
         }
         
         /* Main Content */
@@ -235,9 +239,7 @@ $title = "Dashboard Alumni";
             .sidebar {
                 transform: translateX(-100%);
                 width: 100vw;
-                max-height: 100vh;
-                max-height: 100dvh; /* Dynamic viewport height untuk mobile */
-                padding-bottom: 0;
+                padding-bottom: 20px;
             }
             
             .sidebar.active {
@@ -248,12 +250,12 @@ $title = "Dashboard Alumni";
                 display: block;
             }
             
-            .sidebar-content {
-                padding-bottom: 20px;
+            /* Hide desktop logout, show mobile logout */
+            .logout-sidebar {
+                display: none;
             }
             
-            /* Tampilkan logout di sidebar untuk mobile */
-            .logout-sidebar {
+            .logout-mobile {
                 display: block;
             }
             
@@ -334,6 +336,14 @@ $title = "Dashboard Alumni";
             <div class="profile-name"><?= htmlspecialchars($data['nama_lengkap']) ?></div>
             <div class="profile-desc">Alumni<br><?= htmlspecialchars($data['program_studi']) ?></div>
         </div>
+        
+        <!-- Logout Mobile (After Profile) -->
+        <div class="logout-mobile">
+            <a href="logout.php" class="btn btn-outline-danger btn-sm w-100">
+                <i class="bi bi-box-arrow-right me-1"></i>Logout
+            </a>
+        </div>
+        
         <div>
             <a href="dashboard_alumni.php" class="sidebar-link active">
                 <i class="bi bi-house-door-fill"></i> Dashboard
@@ -349,7 +359,8 @@ $title = "Dashboard Alumni";
             </a>
         </div>
     </div>
-    <!-- Logout hanya tampil di sidebar untuk mobile -->
+    
+    <!-- Logout Desktop (Bottom) -->
     <div class="logout-sidebar">
         <a href="logout.php" class="sidebar-link text-danger">
             <i class="bi bi-box-arrow-right"></i> Logout
