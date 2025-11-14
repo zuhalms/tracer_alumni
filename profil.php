@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Proses upload foto jika ada
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
         $allowed_types = ['image/jpeg', 'image/jpg', 'image/png'];
-        $max_size = 2 * 1024 * 1024; // 2MB
+        $max_size = 10 * 1024 * 1024; // 10MB
         
         if (in_array($_FILES['foto']['type'], $allowed_types) && $_FILES['foto']['size'] <= $max_size) {
             $upload_dir = 'uploads/';
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $error_msg = "Gagal mengupload foto.";
             }
         } else {
-            $error_msg = "Format foto tidak valid atau ukuran terlalu besar (max 2MB).";
+            $error_msg = "Format foto tidak valid atau ukuran terlalu besar (max 10MB).";
         }
     }
 
@@ -354,7 +354,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <i class="bi bi-camera-fill me-2"></i>Pilih Foto
                             </label>
                             <input type="file" id="foto" name="foto" accept="image/*" style="display: none;">
-                            <small class="text-muted mt-2 d-block">Format: JPG, PNG. Max: 2MB</small>
+                            <small class="text-muted mt-2 d-block">Format: JPG, PNG. Max: 10MB</small>
                         </form>
                     </div>
                 </div>
