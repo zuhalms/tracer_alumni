@@ -518,7 +518,6 @@ document.getElementById('foto').addEventListener('change', function(e) {
             document.getElementById('preview-foto').src = e.target.result;
         };
         reader.readAsDataURL(file);
-        
         // Auto submit form foto
         document.getElementById('form-foto').submit();
     }

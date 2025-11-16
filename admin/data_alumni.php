@@ -2,11 +2,11 @@
 session_start();
 include_once(dirname(__DIR__) . '/config/config.php');
 
-// --- Tambahan: Filter Tahun Lulus
+// Filter tahun lulus
 $tahunLulus = isset($_GET['tahun_lulus']) ? intval($_GET['tahun_lulus']) : '';
 $where = $tahunLulus ? "WHERE a.tahun_lulus = '$tahunLulus'" : '';
 
-// Query alumni dan data tracer
+// Query utama data alumni
 $query = "
 SELECT 
     a.id_alumni, a.nim, a.nama_lengkap, a.fakultas, a.program_studi, a.tahun_lulus, a.foto,
@@ -20,10 +20,24 @@ ORDER BY a.nama_lengkap ASC
 ";
 $result = mysqli_query($conn, $query);
 
-// Hitung total progres
-$total_alumni = mysqli_num_rows(mysqli_query($conn, "SELECT id_alumni FROM tb_alumni $where"));
-$isi_pekerjaan = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni FROM tb_pekerjaan".($tahunLulus?" WHERE id_alumni IN (SELECT id_alumni FROM tb_alumni WHERE tahun_lulus='$tahunLulus')":"")));
-$isi_kuesioner = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT id_alumni FROM tb_kuesioner".($tahunLulus?" WHERE id_alumni IN (SELECT id_alumni FROM tb_alumni WHERE tahun_lulus='$tahunLulus')":"")));
+if (!$result) {
+    die("Query Error: " . mysqli_error($conn));
+}
+
+// Hitung statistik progres dengan alias a di query
+$total_alumni = mysqli_num_rows(mysqli_query($conn, "SELECT a.id_alumni FROM tb_alumni a $where"));
+$isi_pekerjaan = mysqli_num_rows(mysqli_query($conn, 
+    "SELECT DISTINCT p.id_alumni 
+     FROM tb_pekerjaan p 
+     INNER JOIN tb_alumni a ON p.id_alumni = a.id_alumni
+     " . ($tahunLulus ? "WHERE a.tahun_lulus = '$tahunLulus'" : "")
+));
+$isi_kuesioner = mysqli_num_rows(mysqli_query($conn, 
+    "SELECT DISTINCT k.id_alumni 
+     FROM tb_kuesioner k 
+     INNER JOIN tb_alumni a ON k.id_alumni = a.id_alumni
+     " . ($tahunLulus ? "WHERE a.tahun_lulus = '$tahunLulus'" : "")
+));
 ?>
 <!DOCTYPE html>
 <html lang="id">
