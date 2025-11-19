@@ -24,7 +24,7 @@ if (!$result) {
     die("Query Error: " . mysqli_error($conn));
 }
 
-// Hitung statistik progres dengan alias a di query
+// Hitung statistik progres
 $total_alumni = mysqli_num_rows(mysqli_query($conn, "SELECT a.id_alumni FROM tb_alumni a $where"));
 $isi_pekerjaan = mysqli_num_rows(mysqli_query($conn, 
     "SELECT DISTINCT p.id_alumni 
@@ -448,11 +448,15 @@ $isi_kuesioner = mysqli_num_rows(mysqli_query($conn,
                             <td>
                                 <div class="d-flex align-items-center">
                                     <?php
-                                    $foto = (!empty($row['foto']) && file_exists("../" . $row['foto'])) 
-                                        ? "../" . $row['foto'] 
-                                        : "../assets/profile_placeholder.png";
+                                    // Path foto alumni
+                                    $fotoPath = !empty($row['foto']) ? "../" . ltrim($row['foto'], '/\\') : '';
+
+                                    // Jika kosong atau file tidak ada, pakai foto default
+                                    if (empty($fotoPath) || !file_exists($fotoPath)) {
+                                        $fotoPath = "../assets/profile_placeholder.jpg"; // pastikan file ini ada
+                                    }
                                     ?>
-                                    <img src="<?= htmlspecialchars($foto) ?>" class="table-avatar" alt="Foto">
+                                    <img src="<?= htmlspecialchars($fotoPath) ?>" class="table-avatar" alt="Foto">
                                     <span><?= htmlspecialchars($row['nama_lengkap']) ?></span>
                                 </div>
                             </td>
