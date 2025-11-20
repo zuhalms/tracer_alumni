@@ -32,6 +32,7 @@ $result = mysqli_query($conn, $query);
 <!DOCTYPE html>
 <html lang="id">
 <head>
+      <link rel="icon" type="image/png" href="../assets/logo-uin.png">
     <meta charset="UTF-8">
     <title>Data Alumni - Export & Preview</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">

@@ -173,14 +173,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold">Password</label>
-                <input 
-                    type="password" 
-                    name="password" 
-                    class="form-control" 
-                    required 
-                    autocomplete="current-password"
-                    placeholder="Masukkan password"
-                />
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password"
+                        class="form-control" 
+                        required 
+                        autocomplete="current-password"
+                        placeholder="Masukkan password"
+                    />
+                    <button 
+                        class="btn btn-outline-secondary" 
+                        type="button" 
+                        id="togglePassword"
+                        tabindex="-1"
+                    >
+                        <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
+                    </button>
+                </div>
             </div>
             <button type="submit" class="btn btn-success w-100 fw-semibold">
                 <i class="bi bi-box-arrow-in-right me-2"></i>Login
@@ -189,5 +200,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('togglePassword');
+        const toggleIcon = document.getElementById('togglePasswordIcon');
+
+        if (passwordInput && toggleBtn && toggleIcon) {
+            toggleBtn.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                // ganti icon mata / mata silang
+                toggleIcon.classList.toggle('bi-eye');
+                toggleIcon.classList.toggle('bi-eye-slash');
+            });
+        }
+    });
+    </script>
 </body>
 </html>
